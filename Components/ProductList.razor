@@ -1,0 +1,18 @@
+@if (!Products.Any())
+{
+    <p>No products available.</p>
+}
+else
+{
+    <div class="product-list">
+        @foreach (var item in Products)
+        {
+            <ProductCard Product="item" />
+        }
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<Product> Products { get; set; } = Array.Empty<Product>();
+}

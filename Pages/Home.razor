@@ -1,0 +1,35 @@
+﻿@page "/"
+
+<PageTitle>Cart Demo</PageTitle>
+
+<h1>Demo ung dung quan ly gio hang</h1>
+<p>Click "Add to cart" de thay doi so luong tren thanh top ma khong can reload trang.</p>
+
+<ProductList Products="products" />
+
+@code {
+	private readonly Product[] products =
+	[
+		new Product
+		{
+			Id = 1,
+			Name = "San pham A",
+			Price = 100000,
+			ImageUrl = "sample-data/products/product-a.svg"
+		},
+		new Product
+		{
+			Id = 2,
+			Name = "San pham B",
+			Price = 200000,
+			ImageUrl = "sample-data/products/product-b.svg"
+		},
+		new Product
+		{
+			Id = 3,
+			Name = "San pham C",
+			Price = 150000,
+			ImageUrl = "sample-data/products/product-c.svg"
+		}
+	];
+}

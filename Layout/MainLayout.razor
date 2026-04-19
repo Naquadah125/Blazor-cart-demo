@@ -1,0 +1,38 @@
+﻿@inherits LayoutComponentBase
+@inject CartState CartState
+@implements IDisposable
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <div class="cart-summary" role="status" aria-live="polite">
+                Cart items: @CartState.TotalItems
+            </div>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        CartState.OnChange += HandleCartChanged;
+    }
+
+    private void HandleCartChanged()
+    {
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        CartState.OnChange -= HandleCartChanged;
+    }
+}
