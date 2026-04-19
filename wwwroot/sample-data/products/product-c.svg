@@ -8,5 +8,5 @@
   <rect width="700" height="525" fill="url(#g3)"/>
   <polygon points="350,110 480,305 220,305" fill="#ffffff" fill-opacity="0.2"/>
   <text x="350" y="245" text-anchor="middle" fill="#ffffff" font-size="96" font-family="Segoe UI, Arial, sans-serif">C</text>
-  <text x="350" y="415" text-anchor="middle" fill="#ffffff" font-size="36" font-family="Segoe UI, Arial, sans-serif">San pham C</text>
+  <text x="350" y="415" text-anchor="middle" fill="#ffffff" font-size="36" font-family="Segoe UI, Arial, sans-serif">Sản phẩm C</text>
 </svg>

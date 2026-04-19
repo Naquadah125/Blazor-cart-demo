@@ -1,0 +1,166 @@
+@page "/thanh-toan"
+@inject CartState CartState
+@using System.ComponentModel.DataAnnotations
+
+<PageTitle>Thanh toán</PageTitle>
+
+<h1>Thanh toán</h1>
+<p>Đặt hàng nhanh, không cần đăng nhập hoặc OAuth.</p>
+
+@if (CartState.IsEmpty && !orderPlaced)
+{
+    <div class="cart-empty">
+        <h3>Chưa có sản phẩm để thanh toán</h3>
+        <p>Vui lòng thêm sản phẩm vào giỏ hàng trước khi đặt đơn.</p>
+        <NavLink class="btn btn-primary" href="">Quay về cửa hàng</NavLink>
+    </div>
+}
+else if (orderPlaced)
+{
+    <div class="checkout-success">
+        <h3>Đặt hàng thành công</h3>
+        <p>Mã đơn hàng: <strong>@lastOrderCode</strong></p>
+        <p>Tổng thanh toán: <strong>@lastOrderTotal.ToString("N0") VND</strong></p>
+        <p>Phương thức thanh toán: <strong>@lastPaymentMethodLabel</strong></p>
+        <NavLink class="btn btn-primary" href="">Tiếp tục mua sắm</NavLink>
+    </div>
+}
+else
+{
+    <EditForm Model="checkoutModel" OnValidSubmit="PlaceOrder">
+        <DataAnnotationsValidator />
+
+        <div class="checkout-layout">
+            <section class="checkout-form-card">
+                <h3>Thông tin nhận hàng</h3>
+
+                <div class="checkout-grid">
+                    <div>
+                        <label class="form-label">Họ và tên</label>
+                        <InputText class="form-control" @bind-Value="checkoutModel.FullName" />
+                        <ValidationMessage For="() => checkoutModel.FullName" />
+                    </div>
+
+                    <div>
+                        <label class="form-label">Số điện thoại</label>
+                        <InputText class="form-control" @bind-Value="checkoutModel.Phone" />
+                        <ValidationMessage For="() => checkoutModel.Phone" />
+                    </div>
+
+                    <div>
+                        <label class="form-label">Email (không bắt buộc)</label>
+                        <InputText class="form-control" @bind-Value="checkoutModel.Email" />
+                        <ValidationMessage For="() => checkoutModel.Email" />
+                    </div>
+
+                    <div class="checkout-span-2">
+                        <label class="form-label">Địa chỉ giao hàng</label>
+                        <InputText class="form-control" @bind-Value="checkoutModel.Address" />
+                        <ValidationMessage For="() => checkoutModel.Address" />
+                    </div>
+
+                    <div class="checkout-span-2">
+                        <label class="form-label">Ghi chú</label>
+                        <InputTextArea class="form-control" @bind-Value="checkoutModel.Note" />
+                    </div>
+                </div>
+
+                <h3 class="checkout-method-title">Phương thức thanh toán</h3>
+
+                <InputRadioGroup @bind-Value="checkoutModel.PaymentMethod" class="checkout-payment-methods">
+                    <label class="checkout-payment-option">
+                        <InputRadio Value="@("cod")" />
+                        <span>Thanh toán khi nhận hàng (COD)</span>
+                    </label>
+
+                    <label class="checkout-payment-option">
+                        <InputRadio Value="@("bank")" />
+                        <span>Chuyển khoản ngân hàng</span>
+                    </label>
+                </InputRadioGroup>
+            </section>
+
+            <aside class="checkout-summary-card">
+                <h3>Chi tiết đơn hàng</h3>
+
+                <div class="checkout-lines">
+                    @foreach (var item in CartState.Items)
+                    {
+                        <div class="checkout-line-item">
+                            <span>@item.ProductName x @item.Quantity</span>
+                            <strong>@item.Subtotal.ToString("N0") VND</strong>
+                        </div>
+                    }
+                </div>
+
+                <hr />
+
+                <div class="checkout-summary-row">
+                    <span>Tạm tính</span>
+                    <strong>@CartState.TotalAmount.ToString("N0") VND</strong>
+                </div>
+
+                <div class="checkout-summary-row">
+                    <span>Phí vận chuyển</span>
+                    <strong>@ShippingFee.ToString("N0") VND</strong>
+                </div>
+
+                <div class="checkout-summary-row checkout-grand-total">
+                    <span>Tổng thanh toán</span>
+                    <strong>@GrandTotal.ToString("N0") VND</strong>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">Xác nhận đặt hàng</button>
+                <NavLink class="btn btn-outline-secondary w-100 mt-2" href="gio-hang">Quay lại giỏ hàng</NavLink>
+            </aside>
+        </div>
+    </EditForm>
+}
+
+@code {
+    private readonly CheckoutInputModel checkoutModel = new();
+
+    private bool orderPlaced;
+    private decimal lastOrderTotal;
+    private string lastOrderCode = string.Empty;
+    private string lastPaymentMethodLabel = string.Empty;
+
+    private decimal ShippingFee => CartState.TotalAmount >= 500000 ? 0 : 30000;
+
+    private decimal GrandTotal => CartState.TotalAmount + ShippingFee;
+
+    private void PlaceOrder()
+    {
+        lastOrderCode = $"DH{DateTime.Now:yyMMddHHmmss}";
+        lastOrderTotal = GrandTotal;
+        lastPaymentMethodLabel = checkoutModel.PaymentMethod == "bank"
+            ? "Chuyển khoản ngân hàng"
+            : "Thanh toán khi nhận hàng";
+
+        orderPlaced = true;
+        CartState.Clear();
+    }
+
+    private sealed class CheckoutInputModel
+    {
+        [Required(ErrorMessage = "Vui lòng nhập họ và tên")]
+        [StringLength(80, ErrorMessage = "Họ tên tối đa 80 ký tự")]
+        public string FullName { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
+        [RegularExpression(@"^\+?[0-9\s]{9,15}$", ErrorMessage = "Số điện thoại không hợp lệ")]
+        public string Phone { get; set; } = string.Empty;
+
+        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
+        public string? Email { get; set; }
+
+        [Required(ErrorMessage = "Vui lòng nhập địa chỉ giao hàng")]
+        [StringLength(200, ErrorMessage = "Địa chỉ tối đa 200 ký tự")]
+        public string Address { get; set; } = string.Empty;
+
+        [StringLength(300, ErrorMessage = "Ghi chú tối đa 300 ký tự")]
+        public string? Note { get; set; }
+
+        public string PaymentMethod { get; set; } = "cod";
+    }
+}

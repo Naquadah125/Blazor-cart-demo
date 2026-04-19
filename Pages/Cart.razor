@@ -1,0 +1,56 @@
+@page "/gio-hang"
+@inject CartState CartState
+
+<PageTitle>Giỏ hàng</PageTitle>
+
+<h1>Giỏ hàng của bạn</h1>
+
+@if (CartState.IsEmpty)
+{
+    <div class="cart-empty">
+        <h3>Giỏ hàng đang trống</h3>
+        <p>Hãy quay lại cửa hàng để thêm sản phẩm vào giỏ.</p>
+        <NavLink class="btn btn-primary" href="">Mua sắm ngay</NavLink>
+    </div>
+}
+else
+{
+    <div class="cart-layout">
+        <div class="cart-lines">
+            @foreach (var item in CartState.Items)
+            {
+                <div class="cart-line">
+                    <img class="cart-line-image" src="@item.ImageUrl" alt="@item.ProductName" />
+
+                    <div class="cart-line-info">
+                        <h3>@item.ProductName</h3>
+                        <p>Đơn giá: @item.UnitPrice.ToString("N0") VND</p>
+                    </div>
+
+                    <div class="cart-line-controls">
+                        <button class="btn btn-outline-secondary btn-sm" @onclick="() => CartState.DecreaseQuantity(item.ProductId)">-</button>
+                        <span class="qty-chip">@item.Quantity</span>
+                        <button class="btn btn-outline-secondary btn-sm" @onclick="() => CartState.IncreaseQuantity(item.ProductId)">+</button>
+                        <button class="btn btn-outline-danger btn-sm" @onclick="() => CartState.RemoveProduct(item.ProductId)">Xóa</button>
+                    </div>
+
+                    <div class="cart-line-total">
+                        @item.Subtotal.ToString("N0") VND
+                    </div>
+                </div>
+            }
+        </div>
+
+        <aside class="cart-total-card">
+            <h3>Tổng quan giỏ hàng</h3>
+            <p>Tổng sản phẩm: <strong>@CartState.TotalItems</strong></p>
+            <p>Tổng tiền: <strong>@CartState.TotalAmount.ToString("N0") VND</strong></p>
+
+            <div class="cart-total-actions">
+                <NavLink class="btn btn-success" href="thanh-toan">Tiến hành thanh toán</NavLink>
+                <button class="btn btn-outline-danger" @onclick="CartState.Clear">Xóa toàn bộ</button>
+                <NavLink class="btn btn-primary" href="">Tiếp tục mua</NavLink>
+            </div>
+        </aside>
+    </div>
+}

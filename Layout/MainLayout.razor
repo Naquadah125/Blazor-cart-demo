@@ -9,9 +9,9 @@
 
     <main>
         <div class="top-row px-4">
-            <div class="cart-summary" role="status" aria-live="polite">
-                Cart items: @CartState.TotalItems
-            </div>
+            <NavLink class="cart-summary" href="gio-hang" Match="NavLinkMatch.Prefix" role="status" aria-live="polite">
+                Giỏ hàng: @CartState.TotalItems món
+            </NavLink>
         </div>
 
         <article class="content px-4">

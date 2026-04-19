@@ -8,5 +8,5 @@
   <rect width="700" height="525" fill="url(#g1)"/>
   <circle cx="350" cy="210" r="95" fill="#ffffff" fill-opacity="0.2"/>
   <text x="350" y="235" text-anchor="middle" fill="#ffffff" font-size="96" font-family="Segoe UI, Arial, sans-serif">A</text>
-  <text x="350" y="415" text-anchor="middle" fill="#ffffff" font-size="36" font-family="Segoe UI, Arial, sans-serif">San pham A</text>
+  <text x="350" y="415" text-anchor="middle" fill="#ffffff" font-size="36" font-family="Segoe UI, Arial, sans-serif">Sản phẩm A</text>
 </svg>

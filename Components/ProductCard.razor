@@ -4,7 +4,7 @@
     <img class="product-image" src="@Product.ImageUrl" alt="@Product.Name" />
     <h3>@Product.Name</h3>
     <p class="product-price">@Product.Price.ToString("N0") VND</p>
-    <button class="btn btn-primary" @onclick="CartState.AddProduct">Add to cart</button>
+    <button class="btn btn-primary" @onclick="() => CartState.AddProduct(Product)">Thêm vào giỏ</button>
 </div>
 
 @code {
