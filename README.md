@@ -53,9 +53,3 @@ Thư mục đầu ra: `publish`.
 - Lỗi biên dịch liên quan .NET 10 (CET): cài .NET 9 hoặc dùng `global.json` trong repo.
 - 404 `_framework/blazor.webassembly.js`: chạy `dotnet build` rồi `dotnet run` để đảm bảo assets được sinh.
 - Lỗi preload/importmap từ template mới: mở `wwwroot/index.html` và loại bỏ placeholder không hợp lệ.
-
-## Mẹo nhanh
-- Mã đơn hàng ở trang checkout là giả lập (không có backend). Nếu muốn lưu giỏ khi reload, mình có thể thêm localStorage.
-
----
-Nếu bạn muốn, mình sẽ bổ sung phần Dockerfile, hướng dẫn CI, hoặc lưu giỏ hàng/đơn vào localStorage. Nói mình làm tiếp nhé.
